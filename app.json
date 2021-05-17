@@ -1,0 +1,14 @@
+{
+    "name": "SSH-server-plugin deployment",
+    "description": "Deploy SSH-server-plugin to Heroku.",
+    "keywords": ["SSH-server", "SSHd", "SSH-server-plugin"],
+    "env": {
+       "USER_IDENTITYS": {
+        "description": "Public user Identitys.",
+        "value": "user01:ssh-rsa ABNaCy2AA...Wi63c8= user01@server01;user02:ssh-rsa BCNy32A54...Zi4535c0= user02@server02;"
+      }
+    },
+    "website": "",
+    "repository": "",
+    "stack": "container"
+}

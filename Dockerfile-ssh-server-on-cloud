@@ -1,0 +1,19 @@
+FROM ubuntu:20.04
+
+COPY conf-nginix/ /conf
+COPY var-www/ /var/www
+COPY entrypoint.sh /entrypoint.sh
+
+ARG DEBIAN_FRONTEND=noninteractive
+RUN set -ex\
+    && apt update --yes \
+    && apt install --yes --no-install-recommends \
+        wget curl bash sudo nano mc \
+        git python3-minimal \
+        nginx openssh-server openssh-client openssl \
+    && apt upgrade --yes \
+    && apt clean --yes \
+    && chmod +x /entrypoint.sh \
+    && cd /var/www && mkdir -p /var/www/tutorial
+
+CMD /entrypoint.sh
