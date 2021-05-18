@@ -7,7 +7,7 @@ Running your own separate ssh server on heroku cloud hosting
 
 Click the button below to deploy to Heroku
 
-[![Deploy this repository as App](https://www.herokucdn.com/deploy/button.png)]
+[![Deploy](https://www.herokucdn.com/deploy/button.png)]
 (https://heroku.com/deploy?template=https://github.com/AssaToolex/ssh-server-on-cloud-heroku/tree/main)
 
 ## 0. Attention
