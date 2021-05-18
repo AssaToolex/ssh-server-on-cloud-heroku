@@ -17,6 +17,11 @@ RUN \
         pypy3 \
         redis-server && \
     apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
-    chmod +x /entrypoint.sh
+    chmod +x /entrypoint.sh && \
+    echo "Sudo fix" && \
+    ls -la /usr/bin/sudo && \
+    chown root:root /usr/bin/sudo && \
+    chmod u+s /usr/bin/sudo && \
+    ls -la /usr/bin/sudo
 
 CMD /entrypoint.sh

@@ -20,7 +20,7 @@ echo "${USER_IDENTITYS};:" | tr ";" "\n" | while read -r user_ident; do
     if [[ "${username}" != "" ]]; then
       userkey=`echo ${user_ident} | cut -d: -f2`
       # ok # echo "username: ${username}, userkey: ${userkey}."
-      useradd -d /home/${username} -s /bin/bash -m ${username}
+      sudo useradd -d /home/${username} -s /bin/bash -m ${username}
       # mkdir -p /home/${username}/.ssh
       echo "${userkey}" >> /home/${username}/.ssh/authorized_keys
     fi
