@@ -41,7 +41,7 @@ cat /etc/nginx/sites-available/default
 # Run OpenSSH server in daemon mode
 /usr/sbin/sshd
 
-#
-/etc/init.d/squid3 start
+# Squid
+# /etc/init.d/squid3 start
 
 nginx -g 'daemon off;'
