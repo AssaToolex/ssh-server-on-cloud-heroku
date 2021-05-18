@@ -13,13 +13,15 @@ fi
 echo "Users:"
 echo "${USER_IDENTITYS};:" | tr ";" "\n" | \
 while read user_ident; do
-  echo "User set: =->${user_ident}<-="
+  # ok # echo "User set: =->${user_ident}<-="
   if [[ "${user_ident}" != "" ]]; then
-    echo "${user_ident}" | IFS=':' read -ra ADDR
-    echo "User: ${ADDR[0]}, Key: ${ADDR[1]}"
-    if [[ "${ADDR[0]}" != "" ]]; then
-      echo "User-do: ${ADDR[0]}"
-      # .ssh/authorized_keys
+    if [[ "${user_ident}" != ":" ]]; then
+      echo "${user_ident}" | tr ":" "\t" | IFS='\t' read -ra ADDR
+      echo "User: ${ADDR[0]}, Key: ${ADDR[1]}"
+      if [[ "${ADDR[0]}" != "" ]]; then
+        echo "User-do: ${ADDR[0]}"
+        # .ssh/authorized_keys
+      fi
     fi
   fi
 done
