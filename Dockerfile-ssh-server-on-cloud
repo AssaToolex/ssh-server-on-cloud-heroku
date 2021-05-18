@@ -18,7 +18,8 @@ RUN \
         pypy3 \
         redis-server && \
     apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
+    echo "root:e511d932-1618-4391-9e89-dad19d071328" | chpasswd && \
     chmod +x /entrypoint.sh && \
-    chmod +x release-tasks.sh
+    chmod +x /release-tasks.sh
 
 CMD /entrypoint.sh
