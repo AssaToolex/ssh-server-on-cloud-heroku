@@ -16,10 +16,10 @@ while read user_ident; do
   if [[ "${user_ident}" != "" ]]; then
     if [[ "${user_ident}" != ":" ]]; then
       echo "User set: =->${user_ident}<-="
-      echo "${user_ident}" | tr ":" "\n" | while read userpart; do
-        echo "${userpart}"
+      echo "${user_ident}" | tr ":" "\n" | while read username userkey; do
+        echo "00 User: ${username}, Key: ${userkey}"
       done
-      echo "User: ${username}, Key: ${userkey}"
+      echo "01 User: ${username}, Key: ${userkey}"
       if [[ "${username}" != "" ]]; then
         echo "User-do: ${username}"
         # .ssh/authorized_keys
