@@ -3,7 +3,7 @@ FROM ubuntu:20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-COPY conf-nginx/ /conf
+COPY conf/ /conf
 COPY var-www-html/ /var/www/html
 COPY entrypoint.sh /entrypoint.sh
 
@@ -13,7 +13,7 @@ RUN set -ex \
         wget curl bash sudo nano mc tcpdump git make \
         python3-minimal python3-distutils python3-venv python3-setuptools python3-wheel python3-pip \
         pypy3 \
-        nginx openssh-server openssh-client openssl \
+        nginx squid openssh-server openssh-client openssl \
         redis-server \
     && apt-get upgrade --quiet --yes \
     && apt-get autoremove \
