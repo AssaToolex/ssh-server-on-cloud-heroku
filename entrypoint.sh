@@ -15,10 +15,15 @@ echo "${USER_IDENTITYS};:" | tr ";" "\n" | while read -r user_ident; do
   if [[ "${user_ident}" != "" || "${user_ident}" != ":" ]]; then
     # ok # echo "User set: =->${user_ident}<-="
     username=`echo ${user_ident} | cut -d: -f1`
-    userkey=`echo ${user_ident} | cut -d: -f2`
-    echo "username: ${username}, userkey: ${userkey}."
+    if [[ "${username}" != "" ]]; then
+      userkey=`echo ${user_ident} | cut -d: -f2`
+      # ok # echo "username: ${username}, userkey: ${userkey}."
+      mkdir -p /home/${username}/.ssh
+      echo "${userkey}" >> /home/${username}/.ssh/authorized_keys
+    fi
   fi
 done
+ls -laR /home
 
 
 # SSHd
