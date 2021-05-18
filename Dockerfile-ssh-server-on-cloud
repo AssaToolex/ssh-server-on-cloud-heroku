@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 COPY conf-nginx/ /conf
-COPY var-www/ /var/www
+COPY var-www-html/ /var/www/html
 COPY entrypoint.sh /entrypoint.sh
 
 RUN set -ex \
