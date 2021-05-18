@@ -1,10 +1,6 @@
+FROM ubuntu:20.04
+
 LABEL maintainer="Assa.Toolex@gmail.com"
-
-ARG APT_VERSION=ubuntu
-ARG APT_RELEASE=20.04
-
-
-FROM ${APT_VERSION}:${APT_RELEASE}
 
 ARG DEBIAN_FRONTEND=noninteractive
 
