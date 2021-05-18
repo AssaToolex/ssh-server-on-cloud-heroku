@@ -16,7 +16,7 @@ while read user_ident; do
   if [[ "${user_ident}" != "" ]]; then
     if [[ "${user_ident}" != ":" ]]; then
       echo "User set: =->${user_ident}<-="
-      echo "${user_ident}" | tr ":" "\n" | while read username userkey; do
+      echo "${user_ident}" | tr ":" "\n" | while read -r username userkey; do
         echo "00 User: ${username}, Key: ${userkey}"
       done
       echo "01 User: ${username}, Key: ${userkey}"
