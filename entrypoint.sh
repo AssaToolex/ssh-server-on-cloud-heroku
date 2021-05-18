@@ -16,7 +16,7 @@ while read user_ident; do
   # ok # echo "User set: =->${user_ident}<-="
   if [[ "${user_ident}" != "" ]]; then
     if [[ "${user_ident}" != ":" ]]; then
-      echo "${user_ident}" | IFS=: read username userkey
+      echo "${user_ident}" | tr ":" "\n" | read username userkey
       echo "User: ${username}, Key: ${userkey}"
       if [[ "${username}" != "" ]]; then
         echo "User-do: ${username}"
