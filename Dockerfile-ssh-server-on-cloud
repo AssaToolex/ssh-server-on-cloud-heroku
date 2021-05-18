@@ -1,17 +1,22 @@
+# Base system is the latest LTS version of Ubuntu.
 FROM ubuntu:20.04
+
+ARG DEBIAN_FRONTEND=noninteractive
 
 COPY conf-nginx/ /conf
 COPY var-www/ /var/www
 COPY entrypoint.sh /entrypoint.sh
 
-ARG DEBIAN_FRONTEND=noninteractive
-RUN set -ex\
-    && apt-get update --yes \
+RUN set -ex \
+    && apt-get update --quiet --yes \
     && apt-get install --yes --no-install-recommends \
-        wget curl bash sudo nano mc \
-        git python3-minimal \
+        wget curl bash sudo nano mc tcpdump \
+        git make \
+        python3-minimal python3-distutils python3-venv python3-setuptools python3-wheel python3-pip \
+        pypy3 \
         nginx openssh-server openssh-client openssl \
-    && apt-get upgrade --yes \
+        redis-server \
+    && apt-get upgrade --quiet --yes \
     && apt-cache clean --yes \
     && chmod +x /entrypoint.sh \
     && cd /var/www && mkdir -p /var/www/tutorial

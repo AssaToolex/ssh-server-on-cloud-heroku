@@ -5,11 +5,18 @@ if [[ -z "${USER_IDENTITYS}" ]]; then
 fi
 echo ${USER_IDENTITYS}
 
+for user_ident in $(echo ${USER_IDENTITYS} | tr ";" "\n"); do
+  # process
+  echo "${user_ident}"
+done
+
 
 bash /conf/nginx_tutorial.conf > /etc/nginx/conf.d/tutorial.conf
 echo /etc/nginx/conf.d/tutorial.conf
 cat /etc/nginx/conf.d/tutorial.conf
 
+# Run OpenSSH server in no-daemon mode
+# /usr/sbin/sshd -D
 systemctl start ssh
 
 # rm -rf /etc/nginx/sites-enabled/default
