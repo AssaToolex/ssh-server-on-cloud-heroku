@@ -17,7 +17,8 @@ RUN set -ex \
         nginx openssh-server openssh-client openssl \
         redis-server \
     && apt-get upgrade --quiet --yes \
-    && apt-cache clean \
+    && apt-get autoremove \
+    && apt-get clean \
     && chmod +x /entrypoint.sh \
     && cd /var/www && mkdir -p /var/www/tutorial
 
