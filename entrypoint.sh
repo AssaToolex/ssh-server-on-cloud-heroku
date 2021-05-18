@@ -11,15 +11,14 @@ if [[ -z "${USER_IDENTITYS}" ]]; then
 fi
 
 echo "Users:"
-echo "${USER_IDENTITYS};" | tr ";:" "\n" | \
+echo "${USER_IDENTITYS};:" | tr ";" "\n" | \
 while read user_ident; do
-  echo "${user_ident}"
+  echo "User set: =->${user_ident}<-="
   if [[ "${user_ident}" != "" ]]; then
-    IFS=':' read -ra ADDR <<< "${user_ident}"
-    username = "${ADDR[0]}"
-    echo "User: ${username}, Key: ${ADDR[1]}"
-    if [[ "${username}" != "" ]]; then
-      echo "User-do: ${username}"
+    echo "${user_ident}" | IFS=':' read -ra ADDR
+    echo "User: ${ADDR[0]}, Key: ${ADDR[1]}"
+    if [[ "${ADDR[0]}" != "" ]]; then
+      echo "User-do: ${ADDR[0]}"
       # .ssh/authorized_keys
     fi
   fi
