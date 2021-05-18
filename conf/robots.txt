@@ -1,0 +1,21 @@
+User-agent: *
+
+Disallow: /*?*
+Disallow: /*%
+Disallow: /index.php
+Disallow: /*?page=
+Disallow: /*&page=
+
+Disallow: *PHPSESSID=
+Disallow: *session_id=
+
+Disallow: /admin
+Disallow: *?s=
+Disallow: *?p=
+
+Disallow: /wp-admin
+Disallow: /wp-includes
+Disallow: /wp-content/plugins
+Disallow: /wp-content/cache
+Disallow: /wp-content/themes
+Disallow: /trackback

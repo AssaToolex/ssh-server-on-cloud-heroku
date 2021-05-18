@@ -3,7 +3,7 @@
 if [[ -z "${SERVER_DOMAIN_NAME}" ]]; then
   export SERVER_DOMAIN_NAME="xxx-xxx-54345.herokuapp.com"
 fi
-echo ${USER_IDENTITYS}
+echo "SERVER_DOMAIN_NAME: ${USER_IDENTITYS}"
 
 
 if [[ -z "${USER_IDENTITYS}" ]]; then
@@ -19,21 +19,14 @@ echo "${USER_IDENTITYS};" | tr ";" "\n"
   # .ssh/authorized_keys
 #done
 
+
+# SSHd
+
 echo "Port 22022" >> /etc/ssh/sshd_config
 echo "PermitRootLogin no" >> /etc/ssh/sshd_config
 echo "PubkeyAuthentication yes" >> /etc/ssh/sshd_config
 # echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
 # echo "AllowUsers Fred Wilma" >> /etc/ssh/sshd_config
-
-
-# bash /conf/nginx_tutorial.conf > /etc/nginx/conf.d/tutorial.conf
-# echo /etc/nginx/conf.d/tutorial.conf
-# cat /etc/nginx/conf.d/tutorial.conf
-
-bash /conf/nginx_tutorial.conf > /etc/nginx/sites-available/default
-echo "# /etc/nginx/sites-available/default"
-cat /etc/nginx/sites-available/default
-
 
 # Run OpenSSH server in no-daemon mode
 # /usr/sbin/sshd -D
@@ -41,7 +34,17 @@ cat /etc/nginx/sites-available/default
 # Run OpenSSH server in daemon mode
 /usr/sbin/sshd
 
+
 # Squid
+
+# Run Squid server in daemon mode
 squid3
+
+
+# Nginx
+
+bash /conf/nginx_default.conf > /etc/nginx/sites-available/default
+echo "# Nginx config in /etc/nginx/sites-available/default"
+cat /etc/nginx/sites-available/default
 
 nginx -g 'daemon off;'
