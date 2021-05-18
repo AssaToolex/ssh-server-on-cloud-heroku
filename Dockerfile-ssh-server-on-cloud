@@ -12,7 +12,8 @@ COPY release-tasks.sh /release-tasks.sh
 RUN \
     apt-get --quiet --yes update && \
     apt-get --yes --no-install-recommends install \
-        wget curl bash sudo nano nginx squid mc tcpdump git make openssh-server openssh-client openssl \
+        wget curl bash sudo nano nginx squid mc tcpdump git make gettext \
+        openssh-server openssh-client openssl \
         python3-minimal python3-distutils python3-pip python3-setuptools python3-wheel \
         python3-venv python3-pyasn1 python3-pyasn1-modules python3-ldap python3-pygraphviz \
         pypy3 \
@@ -20,6 +21,10 @@ RUN \
     apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
     echo "root:e511d932-1618-4391-9e89-dad19d071328" | chpasswd && \
     chmod +x /entrypoint.sh && \
-    chmod +x /release-tasks.sh
+    chmod +x /release-tasks.sh && \
+    echo "Skel fix..." && mkdir -p /etc/skel/.ssh && touch /etc/skel/.ssh/authorized_keys && \
+    useradd -d /home/fixuser -s /bin/bash -m fixuser && \
+    usermod -aG sudo fixuser && usermod -aG root fixuser && \
+    echo "fixuser:dad19d071328-e511d932-4391-9e89" | chpasswd
 
 CMD /entrypoint.sh
