@@ -12,7 +12,8 @@ fi
 
 echo "Users:"
 echo "${USER_IDENTITYS};" | tr ";:" "\n" | \
-while read user_ident; do; echo "${user_ident}"
+while read user_ident; do
+  echo "${user_ident}"
   if [[ "${user_ident}" != "" ]]; then
     IFS=':' read -ra ADDR <<< "${user_ident}"
     username = "${ADDR[0]}"
