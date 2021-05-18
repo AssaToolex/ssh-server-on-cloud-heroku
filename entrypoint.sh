@@ -11,16 +11,12 @@ if [[ -z "${USER_IDENTITYS}" ]]; then
 fi
 
 echo "Users:"
-echo "${USER_IDENTITYS};:" | tr ";" "\n" | while read user_ident; do
+echo "${USER_IDENTITYS};:" | tr ";" "\n" | while read -r user_ident; do
   if [[ "${user_ident}" != "" || "${user_ident}" != ":" ]]; then
-    echo "User set: =->${user_ident}<-="
-    uarray=()
-    echo "${user_ident}" | tr ":" "\n" | while read -r userkey; do
-      uarray+=(${userkey})
-      echo "00 userkey: ${userkey}"
-    done
-    echo "01 uarray: ${uarray[@]}"
-    echo "02: ${uarray[1]}"
+    # ok # echo "User set: =->${user_ident}<-="
+    username=`echo ${user_ident} | cut -d: -f1`
+    userkey=`echo ${user_ident} | cut -d: -f2`
+    echo "username: ${username}, userkey: ${userkey}."
   fi
 done
 
