@@ -16,10 +16,10 @@ while read user_ident; do
   # ok # echo "User set: =->${user_ident}<-="
   if [[ "${user_ident}" != "" ]]; then
     if [[ "${user_ident}" != ":" ]]; then
-      echo "${user_ident}" | tr ":" "\t" | IFS='\t' read -ra ADDR
-      echo "User: ${ADDR[0]}, Key: ${ADDR[1]}"
-      if [[ "${ADDR[0]}" != "" ]]; then
-        echo "User-do: ${ADDR[0]}"
+      echo "${user_ident}" | IFS=: read username userkey
+      echo "User: ${username}, Key: ${userkey}"
+      if [[ "${username}" != "" ]]; then
+        echo "User-do: ${username}"
         # .ssh/authorized_keys
       fi
     fi
