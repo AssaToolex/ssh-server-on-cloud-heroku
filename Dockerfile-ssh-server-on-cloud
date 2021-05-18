@@ -7,6 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 COPY conf/ /conf
 COPY var-www-html/ /var/www/html
 COPY entrypoint.sh /entrypoint.sh
+COPY release-tasks.sh /release-tasks.sh
 
 RUN \
     apt-get --quiet --yes update && \
@@ -17,11 +18,6 @@ RUN \
         pypy3 \
         redis-server && \
     apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
-    chmod +x /entrypoint.sh && \
-    echo "Sudo fix" && \
-    ls -la /usr/bin/sudo && \
-    chown root:root /usr/bin/sudo && \
-    chmod u+s /usr/bin/sudo && \
-    ls -la /usr/bin/sudo
+    chmod +x /entrypoint.sh
 
 CMD /entrypoint.sh

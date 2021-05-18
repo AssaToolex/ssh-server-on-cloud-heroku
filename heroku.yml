@@ -8,3 +8,8 @@
 build:
   docker:
     web: Dockerfile-ssh-server-on-cloud
+
+release:
+  image: web
+  command:
+    - ./release-tasks.sh
