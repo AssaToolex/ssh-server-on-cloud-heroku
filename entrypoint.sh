@@ -16,11 +16,9 @@ while read user_ident; do
   if [[ "${user_ident}" != "" ]]; then
     if [[ "${user_ident}" != ":" ]]; then
       echo "User set: =->${user_ident}<-="
-      echo "${user_ident}" | tr ":" "\n" | read -ra ADDR
-      for i in "${ADDR[@]}"; do
-        echo "$i"
+      echo "${user_ident}" | tr ":" "\n" | while read userpart; do
+        echo "${userpart}"
       done
-
       echo "User: ${username}, Key: ${userkey}"
       if [[ "${username}" != "" ]]; then
         echo "User-do: ${username}"
