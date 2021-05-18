@@ -13,10 +13,14 @@ fi
 echo "Users:"
 echo "${USER_IDENTITYS};:" | tr ";" "\n" | \
 while read user_ident; do
-  # ok # echo "User set: =->${user_ident}<-="
   if [[ "${user_ident}" != "" ]]; then
     if [[ "${user_ident}" != ":" ]]; then
-      echo "${user_ident}" | tr ":" "\n" | read username userkey
+      echo "User set: =->${user_ident}<-="
+      echo "${user_ident}" | tr ":" "\n" | read -ra ADDR
+      for i in "${ADDR[@]}"; do
+        echo "$i"
+      done
+
       echo "User: ${username}, Key: ${userkey}"
       if [[ "${username}" != "" ]]; then
         echo "User-do: ${username}"
