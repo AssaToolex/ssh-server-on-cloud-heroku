@@ -1,5 +1,10 @@
-# Base system is the latest LTS version of Ubuntu.
-FROM ubuntu:20.04
+LABEL maintainer="Assa.Toolex@gmail.com"
+
+ARG APT_VERSION=ubuntu
+ARG APT_RELEASE=20.04
+
+
+FROM ${APT_VERSION}:${APT_RELEASE} as builder
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -7,18 +12,15 @@ COPY conf/ /conf
 COPY var-www-html/ /var/www/html
 COPY entrypoint.sh /entrypoint.sh
 
-RUN set -ex \
-    && apt-get update --quiet --yes \
-    && apt-get install --yes --no-install-recommends \
-        wget curl bash sudo nano mc tcpdump git make \
-        python3-minimal python3-distutils python3-venv python3-setuptools python3-wheel python3-pip \
+RUN \
+    apt-get --quiet --yes update && \
+    apt-get --yes --no-install-recommends install \
+        wget curl bash sudo nano nginx squid mc tcpdump git make openssh-server openssh-client openssl \
+        python3-minimal python3-distutils python3-pip python3-setuptools python3-wheel \
+        python3-venv python3-pyasn1 python3-pyasn1-modules python3-ldap python3-pygraphviz \
         pypy3 \
-        nginx squid openssh-server openssh-client openssl \
-        redis-server \
-    && apt-get upgrade --quiet --yes \
-    && apt-get autoremove \
-    && apt-get clean \
-    && chmod +x /entrypoint.sh \
-    && cd /var/www && mkdir -p /var/www/tutorial
+        redis-server && \
+    apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
+    chmod +x /entrypoint.sh
 
 CMD /entrypoint.sh
