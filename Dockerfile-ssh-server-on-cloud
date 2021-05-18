@@ -10,8 +10,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN set -ex \
     && apt-get update --quiet --yes \
     && apt-get install --yes --no-install-recommends \
-        wget curl bash sudo nano mc tcpdump \
-        git make \
+        wget curl bash sudo nano mc tcpdump git make \
         python3-minimal python3-distutils python3-venv python3-setuptools python3-wheel python3-pip \
         pypy3 \
         nginx openssh-server openssh-client openssl \

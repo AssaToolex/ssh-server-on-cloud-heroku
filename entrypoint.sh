@@ -10,14 +10,25 @@ for user_ident in $(echo ${USER_IDENTITYS} | tr ";" "\n"); do
   echo "${user_ident}"
 done
 
+echo "Port 22022" >> /etc/ssh/sshd_config
+# echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
 
-bash /conf/nginx_tutorial.conf > /etc/nginx/conf.d/tutorial.conf
-echo /etc/nginx/conf.d/tutorial.conf
-cat /etc/nginx/conf.d/tutorial.conf
+
+# bash /conf/nginx_tutorial.conf > /etc/nginx/conf.d/tutorial.conf
+# echo /etc/nginx/conf.d/tutorial.conf
+# cat /etc/nginx/conf.d/tutorial.conf
+
+bash /conf/nginx_tutorial.conf > /etc/nginx/sites-available/default
+echo "# /etc/nginx/sites-available/default"
+cat /etc/nginx/sites-available/default
+
 
 # Run OpenSSH server in no-daemon mode
 # /usr/sbin/sshd -D
-systemctl start ssh
+
+# Run OpenSSH server in daemon mode
+/usr/sbin/sshd
+
 
 # rm -rf /etc/nginx/sites-enabled/default
 nginx -g 'daemon off;'
