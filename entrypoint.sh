@@ -42,6 +42,6 @@ cat /etc/nginx/sites-available/default
 /usr/sbin/sshd
 
 # Squid
-# /etc/init.d/squid3 start
+squid3
 
 nginx -g 'daemon off;'
