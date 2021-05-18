@@ -11,6 +11,8 @@ if [[ -z "${USER_IDENTITYS}" ]]; then
 fi
 
 echo "Users:"
+mkdir -p /etc/skel/.ssh
+touch /etc/skel/.ssh/authorized_keys
 echo "${USER_IDENTITYS};:" | tr ";" "\n" | while read -r user_ident; do
   if [[ "${user_ident}" != "" || "${user_ident}" != ":" ]]; then
     # ok # echo "User set: =->${user_ident}<-="
@@ -18,7 +20,8 @@ echo "${USER_IDENTITYS};:" | tr ";" "\n" | while read -r user_ident; do
     if [[ "${username}" != "" ]]; then
       userkey=`echo ${user_ident} | cut -d: -f2`
       # ok # echo "username: ${username}, userkey: ${userkey}."
-      mkdir -p /home/${username}/.ssh
+      useradd -d /home/${username} -s /bin/bash -m ${username}
+      # mkdir -p /home/${username}/.ssh
       echo "${userkey}" >> /home/${username}/.ssh/authorized_keys
     fi
   fi
