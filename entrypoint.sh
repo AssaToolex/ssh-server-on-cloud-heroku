@@ -19,7 +19,7 @@ echo ${USER_IDENTITYS} | tr ";;;" "\n"
   # .ssh/authorized_keys
 #done
 
-echo "Port 22022" >> /etc/ssh/sshd_config
+echo "Port ${PORT}" >> /etc/ssh/sshd_config
 echo "PermitRootLogin no" >> /etc/ssh/sshd_config
 echo "PubkeyAuthentication yes" >> /etc/ssh/sshd_config
 # echo "PasswordAuthentication no" >> /etc/ssh/sshd_config
@@ -36,11 +36,10 @@ cat /etc/nginx/sites-available/default
 
 
 # Run OpenSSH server in no-daemon mode
-# /usr/sbin/sshd -D
+/usr/sbin/sshd -D
 
 # Run OpenSSH server in daemon mode
-/usr/sbin/sshd
+# /usr/sbin/sshd
 
 
-# rm -rf /etc/nginx/sites-enabled/default
-nginx -g 'daemon off;'
+# nginx -g 'daemon off;'
