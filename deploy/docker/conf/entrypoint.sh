@@ -53,4 +53,17 @@ bash /conf/nginx_default.conf > /etc/nginx/sites-available/default
 echo "# Nginx config in /etc/nginx/sites-available/default"
 cat /etc/nginx/sites-available/default
 
-nginx -g 'daemon off;'
+# Run Nginx server in daemon mode
+nginx -g 'daemon on;'
+
+# Run Nginx server in no-daemon mode
+# nginx -g 'daemon off;'
+
+
+# Custom SSHd 
+
+# Custom SSHd server in daemon mode
+# cd /tools && python3 paramiko-2104.py &
+
+# Custom SSHd server in no-daemon mode
+cd /tools && python3 paramiko-2104.py
