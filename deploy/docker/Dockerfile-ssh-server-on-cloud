@@ -17,11 +17,7 @@ RUN \
         pypy3 \
         redis-server && \
     apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
-    echo "root:e511d932-1618-4391-9e89-dad19d071328" | chpasswd && \
     chmod +x /conf/*.sh && \
-    echo "Skel fix..." && mkdir -p /etc/skel/.ssh && touch /etc/skel/.ssh/authorized_keys && \
-    useradd -d /home/fixuser -s /bin/bash -m fixuser && \
-    usermod -aG sudo fixuser && usermod -aG root fixuser && \
-    echo "fixuser:dad19d071328-e511d932-4391-9e89" | chpasswd
+    echo "Skel fix..." && mkdir -p /etc/skel/.ssh && touch /etc/skel/.ssh/authorized_keys
 
 CMD /conf/entrypoint.sh
