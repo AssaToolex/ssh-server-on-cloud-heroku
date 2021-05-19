@@ -5,10 +5,18 @@ if [[ -z "${SERVER_DOMAIN_NAME}" ]]; then
 fi
 echo "Domain name: ${SERVER_DOMAIN_NAME}"
 
-
 if [[ -z "${USER_IDENTITYS}" ]]; then
   export USER_IDENTITYS="user01:ssh-rsa ABNaCy2AA...Wi63c8= user01@server01;user02:ssh-rsa BCNy32A54...Zi4535c0= user02@server02"
 fi
+
+if [[ -z "${SSMTP_PARAMETERS}" ]]; then
+  export SSMTP_PARAMETERS="root=reports@gmail.com;mailhub=smtp.gmail.com:587;hostname=localhost;UseSTARTTLS=YES;AuthUser=reports@gmail.com;AuthPass=qwerty"
+fi
+echo "# new file." > /etc/ssmtp/ssmtp.conf
+echo "${SSMTP_PARAMETERS}" | tr ";" "\n" | while read -r ssmpt_line; do
+  echo "${user_ident}" >> /etc/ssmtp/ssmtp.conf
+done
+
 
 echo "Users:"
 echo "${USER_IDENTITYS};:" | tr ";" "\n" | while read -r user_ident; do

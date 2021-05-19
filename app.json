@@ -7,9 +7,13 @@
         "description": "Public server DNS/FQDN name.",
         "value": "xxx-xxx-54345.herokuapp.com"
       },
-       "USER_IDENTITYS": {
+      "USER_IDENTITYS": {
         "description": "Public user Identitys.",
         "value": "user01:ssh-rsa ABNaCy2AA...Wi63c8= user01@server01;user02:ssh-rsa BCNy32A54...Zi4535c0= user02@server02"
+      },
+      "SSMTP_PARAMETERS": {
+        "description": "SSmtp parameters.",
+        "value": "root=reports@gmail.com;mailhub=smtp.gmail.com:587;hostname=localhost;UseSTARTTLS=YES;AuthUser=reports@gmail.com;AuthPass=qwerty"
       }
     },
     "website": "",
