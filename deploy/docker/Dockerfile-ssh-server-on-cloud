@@ -11,7 +11,7 @@ COPY var-www-html/ /var/www/html
 RUN \
     apt-get --quiet --yes update && \
     apt-get --yes --no-install-recommends install \
-        wget curl bash sudo nano nginx squid mc tcpdump git make gettext \
+        wget curl bash sudo nano nginx squid mc tcpdump git make gettext ssmtp mutt \
         openssh-server openssh-client openssl \
         python3-minimal python3-distutils python3-pip python3-setuptools python3-wheel \
         python3-venv python3-virtualenv \
