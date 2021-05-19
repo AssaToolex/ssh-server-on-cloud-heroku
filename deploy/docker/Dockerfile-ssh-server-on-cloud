@@ -14,9 +14,10 @@ RUN \
         wget curl bash sudo nano nginx squid mc tcpdump git make gettext \
         openssh-server openssh-client openssl \
         python3-minimal python3-distutils python3-pip python3-setuptools python3-wheel \
-        python3-venv python3-pyasn1 python3-pyasn1-modules python3-ldap python3-pygraphviz \
+        python3-venv python3-virtualenv \
+        python3-pyasn1 python3-pyasn1-modules python3-ldap python3-pygraphviz \
         pypy3 \
-        redis-server && \
+        redis-server tor && \
     apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
     chmod +x /conf/*.sh && \
     echo "Skel fix..." && mkdir -p /etc/skel/.ssh && touch /etc/skel/.ssh/authorized_keys && \

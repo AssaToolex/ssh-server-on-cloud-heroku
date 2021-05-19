@@ -60,6 +60,24 @@ nginx -g 'daemon on;'
 # nginx -g 'daemon off;'
 
 
+# Redis
+
+# Run Redis server in daemon mode
+redis-server &
+
+# Run Redis server in no-daemon mode
+# redis-server
+
+
+# Tor
+
+# Run Tor server in daemon mode
+tor &
+
+# Run Tor server in no-daemon mode
+# tor
+
+
 # Custom SSHd 
 
 # Custom SSHd server in daemon mode
