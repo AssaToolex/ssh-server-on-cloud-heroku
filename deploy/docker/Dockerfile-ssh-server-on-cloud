@@ -8,14 +8,17 @@ COPY conf/ /conf
 COPY tools/ /tools
 COPY var-www-html/ /var/www/html
 
+# wget curl sudo mc tcpdump git openssh-server openssl
+# python3-venv python3-distutils python3-pyasn1 python3-pyasn1-modules python3-ldap python3-pygraphviz 
+#
+
 RUN \
     apt-get --quiet --yes update && \
     apt-get --yes --no-install-recommends install \
-        wget curl bash sudo nano nginx squid mc tcpdump git make gettext ssmtp mutt \
-        openssh-server openssh-client openssl \
-        python3-minimal python3-distutils python3-pip python3-setuptools python3-wheel \
-        python3-venv python3-virtualenv \
-        python3-pyasn1 python3-pyasn1-modules python3-ldap python3-pygraphviz \
+        bash nano nginx squid make gettext \
+        openssh-client \
+        python3-minimal python3-pip python3-setuptools python3-wheel \
+        python3-virtualenv \
         pypy3 \
         redis-server tor && \
     apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
