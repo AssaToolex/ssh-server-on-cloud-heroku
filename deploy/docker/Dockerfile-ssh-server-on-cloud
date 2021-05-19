@@ -19,6 +19,7 @@ RUN \
         redis-server && \
     apt-get --quiet --yes upgrade && apt-get --quiet --yes autoremove && apt-get clean && \
     chmod +x /conf/*.sh && \
-    echo "Skel fix..." && mkdir -p /etc/skel/.ssh && touch /etc/skel/.ssh/authorized_keys
+    echo "Skel fix..." && mkdir -p /etc/skel/.ssh && touch /etc/skel/.ssh/authorized_keys && \
+    cd /tools/modules/sshd && make pip_install_cpython3
 
 CMD /conf/entrypoint.sh
