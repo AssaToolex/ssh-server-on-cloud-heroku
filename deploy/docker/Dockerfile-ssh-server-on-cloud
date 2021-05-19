@@ -5,6 +5,7 @@ LABEL maintainer="Assa.Toolex@gmail.com"
 ARG DEBIAN_FRONTEND=noninteractive
 
 COPY conf/ /conf
+COPY tools/ /tools
 COPY var-www-html/ /var/www/html
 
 RUN \
