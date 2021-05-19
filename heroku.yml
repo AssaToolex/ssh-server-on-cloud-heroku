@@ -7,9 +7,9 @@
 
 build:
   docker:
-    web: Dockerfile-ssh-server-on-cloud
+    web: deploy/docker/Dockerfile-ssh-server-on-cloud
 
 release:
   image: web
   command:
-    - ./release-tasks.sh
+    - ./conf/release-tasks.sh
