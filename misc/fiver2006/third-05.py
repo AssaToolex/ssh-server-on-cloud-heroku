@@ -189,12 +189,6 @@ def five(update: Update, context: CallbackContext) -> int:
     return ConversationHandler.END
 
 
-@inline_handler(return_state=ConversationHandler.END)
-def five_dec2(update: Update, context: CallbackContext):
-    query = update.callback_query
-    query.edit_message_text(text="See you 5.2 next time!")
-
-
 def six(update: Update, context: CallbackContext) -> int:
     query = update.callback_query
     query.answer()
@@ -212,38 +206,36 @@ def end(update: Update, context: CallbackContext) -> int:
     return ConversationHandler.END
 
 
+def inlinekeyboard_menu(context):
+    keyboard = [
+        [InlineKeyboardButton(v, callback_data=str(k)) for k, v in x.items()]
+        for x in context["keyboard"]]
+    return InlineKeyboardMarkup(keyboard)
+
+
 def ky5_start(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
     logger.info("Ky5 User %s started the conversation.", user.first_name)
 
-    # Build InlineKeyboard where each button has a displayed text
-    # and a string as callback_data
-    # The keyboard is a list of button rows, where each row is in turn
-    # a list (hence `[[...]]`).
-
     f_context = function_handlers["commands"]['ky5']['start_handler']
+    reply_markup = InlineKeyboardMarkup(inlinekeyboard_menu(f_context))
 
-    keyboard = [
-        [InlineKeyboardButton(v, callback_data=str(k)) for k, v in x.items()]
-        for x in f_context["keyboard"]]
-
-    keyboard2 = [
-        [
-            InlineKeyboardButton("1", callback_data=str(ONE)),
-            InlineKeyboardButton("2", callback_data=str(TWO)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
     # Send message with text and appended InlineKeyboard
     update.message.reply_text(f_context["text"], reply_markup=reply_markup)
     # Tell ConversationHandler that we're in state `FIRST` now
     return FIRST
 
 
+@inline_handler(return_state=ConversationHandler.END)
+def five_dec2(update: Update, context: CallbackContext):
+    query = update.callback_query
+    query.edit_message_text(text="See you 5.2 next time!")
+
+
 function_handlers = {"commands": {
     'ky5': {
         'start_handler': {
-            "function": ky5_start,
+            "handler": ky5_start,
             "text": "Start handler, Ky5 ,Choose a route",
             "keyboard": [
                 {ONE: "text2_", },
@@ -254,24 +246,24 @@ function_handlers = {"commands": {
         'handlers': {
             0: {
                 0: {
-                    "function": one,
-                    "k": [
+                    "handler": one,
+                    "keyboard": [
                         {TWO: "text2_", THREE: "text3_", },
                         {TWO: "text22", THREE: "text33", },
                     ]
                 },
-                1: {"function": two, },
-                2: {"function": three, },
-                3: {"function": four, },
+                1: {"handler": two, },
+                2: {"handler": three, },
+                3: {"handler": four, },
             },
             1: {
-                0: {"function": start_over, },
-                1: {"function": end, },
+                0: {"handler": start_over, },
+                1: {"handler": end, },
             },
         }}}}
 
 
-def make_conversation(
+def make_conversation_02_old(
         command_name: str = 'start', command_handler: object = None,
         function_handlers: List[Dict] = []) -> ConversationHandler:
     """
@@ -299,17 +291,16 @@ def make_conversation_dict_dict(
     Make conversation for inline buttons.
 
     Info:
-        https://github.com/python-telegram-bot/python-telegram-bot/examples/inlinekeyboard2.py
+        https://github.com/python-telegram-bot/python-telegram-bot/
+        examples/inlinekeyboard2.py
     """
-
-    def cbqh(k, v) -> CallbackQueryHandler:
-        return CallbackQueryHandler(v["function"], pattern='^' + str(k) + '$')
 
     return ConversationHandler(
         entry_points=[CommandHandler(command_name, command_handler)],
         fallbacks=[CommandHandler(command_name, command_handler)],
-        states={
-            state_id: [cbqh(k, v) for k, v in state_value.items()]
+        states={state_id: [
+            CallbackQueryHandler(v["handler"], pattern='^' + str(k) + '$')
+            for k, v in state_value.items()]
             for state_id, state_value in function_handlers.items()})
 
 
@@ -414,11 +405,11 @@ def main() -> None:
             {ONE: start_over, TWO: end, },
         ]))
 
+    handler_context = function_handlers["commands"]['ky5']
     dispatcher.add_handler(make_conversation_dict_dict(
-        command_name='ky5', command_handler=function_handlers["commands"][
-            'ky5']['start_handler']["function"],
-        function_handlers=function_handlers["commands"][
-            'ky5']['handlers']))
+        command_name='ky5', command_handler=handler_context[
+            'start_handler']["handler"],
+        function_handlers=handler_context['handlers']))
 
     # Start the Bot
     updater.start_polling()
