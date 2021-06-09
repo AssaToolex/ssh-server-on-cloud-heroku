@@ -37,42 +37,30 @@ keys_btn = [
                 "Management Menu": None, }, },
         ],
         "MERCHANTS SIDE LOOK": [
-            {
-                "Post Product": {"See Function in Word doc": None, }, },
-            {
-                "Post Full Catalog with pictures": {
-                    "A chat that is dedicated to full catalog 1 post = 1 product": None, }, },
-            {
-                "Post Contest": {
-                    "Post with Text and Vid / Pic": None, },
-                "Post Lottery": None, },
-            {
-                "Post Winners": None, },
-            {
-                "Post Today’s Sale": {
-                    "Post with Text and Vid / Pic": None, },
-                "Post Today’s Discount": None, },
-            {
-                "See Statistics": None, },
-            {
-                "Merchant Forum": {"See Function in Word doc": None, }, },
-            {
-                "Contact Management": {"See Function in Word doc": None, }, },
+            {"Post Product": {"See Function in Word doc": None, }, },
+            {"Post Full Catalog with pictures": {
+                "A chat that is dedicated to full catalog 1 post = 1 product": None, }, },
+            {"Post Contest": {
+                "Post with Text and Vid / Pic": None, },
+             "Post Lottery": None, },
+            {"Post Winners": None, },
+            {"Post Today’s Sale": {
+                "Post with Text and Vid / Pic": None, },
+             "Post Today’s Discount": None, },
+            {"See Statistics": None, },
+            {"Merchant Forum": {"See Function in Word doc": None, }, },
+            {"Contact Management": {"See Function in Word doc": None, }, },
         ],
     }
 ]
-
+handler_states = {}
+inline_keyboards = {}
+conversation_id = str(uuid4())
+first_start_id = conversation_id  # Top level buttons
 logger = logging.getLogger()
-callbacks = {}
 
 
-def match_callback(k, v):
-    new_uuid = str(uuid4())  # random
-    callbacks[new_uuid] = {"v": v, "k": k, }
-    return str(new_uuid)
-
-
-def start(update, context):
+def start(update: Update, context: CallbackContext) -> str:
     # Get user that sent /start and log his name
     user = update.message.from_user
     logger.info("User %s started the conversation.", user.first_name)
@@ -81,39 +69,18 @@ def start(update, context):
         chat_id=update.effective_chat.id,
         text="I'm a bot, please talk to me!")
 
-    if False:
-
-        # Stages
-        FIRST, SECOND = range(2)
-        # Callback data
-        ONE, TWO, THREE, FOUR = range(4)
-
-        # Build InlineKeyboard where each button has a displayed text
-        # and a string as callback_data
-        # The keyboard is a list of button rows, where each row is in turn
-        # a list (hence `[[...]]`).
-        keyboard = [
-            [
-                InlineKeyboardButton("1", callback_data=str(ONE)),
-                InlineKeyboardButton("2", callback_data=str(TWO)),
-            ],
-        ]
-        reply_markup = InlineKeyboardMarkup(keyboard)
-        # Send message with text and appended InlineKeyboard
-        update.message.reply_text(
-            "Start handler, Choose a route",
-            reply_markup=reply_markup)
-
     #
     # Top level buttons
     #
 
-    buttons_dict = keys_btn[0]
+    # Ok # print(first_start_id)
     keyboard = [
-        [InlineKeyboardButton(k, callback_data=match_callback(k, v)), ]
-        for k, v in buttons_dict.items()]
+        [InlineKeyboardButton(x[2], callback_data=x[1]) for x in bb]
+        for bb in inline_keyboards[first_start_id]]  # Top level buttons
     update.message.reply_text(
         "Choose you level", reply_markup=InlineKeyboardMarkup(keyboard))
+
+    return first_start_id  # Top level buttons
 
 
 def echo(update, context):
@@ -125,21 +92,27 @@ def echo(update, context):
 def main():
 
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.INFO,  #
+        # level=logging.DEBUG,  #
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-    # logger.setLevel(logging.INFO)
-    logger.setLevel(logging.DEBUG)
 
     updater = Updater(token=telegram_token, use_context=True)
     dispatcher = updater.dispatcher
 
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
+    #echo_handler = MessageHandler(
+    #    Filters.text & (~Filters.command), echo)
+    #dispatcher.add_handler(echo_handler)
 
-    echo_handler = MessageHandler(
-        Filters.text & (~Filters.command), echo)
-    dispatcher.add_handler(echo_handler)
+    conv_handler = ConversationHandler(
+        entry_points=[CommandHandler('start', start)],
+        fallbacks=[CommandHandler('start', start)],
+        states={k1: (
+            CallbackQueryHandler(v2[0], pattern='^' + str(v2[1]) + '$')
+            for v2 in v1) for k1, v1 in handler_states.items()},
+    )
+
+    # Add ConversationHandler to dispatcher that will be used for handling updates
+    dispatcher.add_handler(conv_handler)
 
     # Start the Bot
     updater.start_polling()
@@ -150,74 +123,97 @@ def main():
     updater.idle()
 
 
-handler_states = {}
+def empty_function(update: Update, context: CallbackContext) -> str:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
 
-
-def empty_function():
-    pass
+    logger.info("Empty function.")
+    return first_start_id  # Top level buttons
 
 
 def gen_one_state(state=None):
-    """Return: are_append, func_id, str_pattern, str_button. ???."""
+    """Return: are_append, ((func_id, str_pattern, str_button), ). ???."""
+
+    global conversation_id
+
     if state is None:
-        return False, None, None, None
+        return False, ((None, None, None), )
     elif isinstance(state, str):  # Str ""  # Button without handler
-        return True, "empty_function", str(uuid4()), str
+        return True, ((empty_function, str(uuid4()), state), )
     elif isinstance(state, int):  # Int ""  # Button without handler
-        return True, "empty_function", str(uuid4()), str(str)
+        return True, ((empty_function, str(uuid4()), str(state)), )
     elif isinstance(state, list) or isinstance(state, tuple):  # List []
         # New state of conversations
         new_state = []
+        new_keyboards = []
         for query_value in state:
-            are_append, func_id, str_pattern, str_button = gen_one_state(query_value)
+            are_append, info_id = gen_one_state(state=query_value)
             if are_append is True:
-                new_state.append(
-                    {"function": func_id, "key_pattern": str_pattern, "text_button": str(query_value), }
-                )
+                new_state.extend(info_id)
+                new_keyboards.append(info_id)
         if len(new_state) > 0:
-            conversation_id = str(uuid4())  # random
             handler_states[conversation_id] = new_state
-        return False, None, None, None
+            inline_keyboards[conversation_id] = new_keyboards
+            conversation_id = str(uuid4())
+        return False, ((None, None, None), )
     elif isinstance(state, dict):  # Dick {}
-        s = ""
-        for k, v in state.items():
-            f = match_callback(k, v)
-            s = s + ", " + k + ": {=->" + gen_one_state(v) + "<-=}"
-        return "Dict"+s
-    return True, "type not found", "!!!"+str(type(state)), "!!!", "type not found"
+        # Append sates of conversations
+        append_state = []
+        for button_text, query_value in state.items():
+            if callable(query_value):
+                append_state.append((query_value, str(uuid4()), str(button_text), ))
+            elif query_value is None:
+                append_state.append((empty_function, str(uuid4()), str(button_text), ))
+            else:
+                append_state.append(("DictValue", str(uuid4()), str(button_text), ))
+        return True, append_state
+    return True, (("type not found", "!!!"+str(type(state)), "!!!", "type not found"), )
 
 
-def gen_st():
+def generator_states():
 
-    import pprint
+    if False:
+        top_zz = gen_one_state(
+            state=[
+                [
+                    "sss",
+                    {"Info 555": empty_function, "Info 777": None, "Info 888": None, },
+                    3,
+                ],
+                [
+                    "sss",
+                    2,
+                    {"sss": {1:2, }, },
+                    1,
+                    {"KY 555": None, "KY 777": None, "KY 888": None, },
+                    None,
 
-    top_zz = gen_one_state(
-          [
-            [
-                "sss",
-                None,
-                3,
-            ],
-            [
-                "sss",
-                2,
-                "sss",
-                1,
-                None,
-                None,
+                ],
+            ])
+        import pprint
+        pprint.pprint(handler_states)
 
-            ],
-          ]
+    if False:
+        top_zz = gen_one_state(
+            state=keys_btn[0]['GROUPS / CHANNELS SIDE LOOK'])
+        import pprint
+        pprint.pprint(handler_states)
 
-        )
+    if False:
+        top_zz = gen_one_state(
+            state=keys_btn[0]["BOT SIDE LOOK"])
+        import pprint
+        pprint.pprint(handler_states)
 
-    pprint.pprint(handler_states)
-
-    # keyboard = [
-    #        [InlineKeyboardButton(k, callback_data=match_callback(k, v)), ]
-    #        for k, v in buttons_dict.items()]
+    if True:
+        top_zz = gen_one_state(
+            state=keys_btn[0]['MERCHANTS SIDE LOOK'])
+        import pprint
+        #pprint.pprint(handler_states)
+        pprint.pprint(inline_keyboards)
 
 
 if __name__ == '__main__':
-    # main()
-    gen_st()
+    generator_states()
+    main()
