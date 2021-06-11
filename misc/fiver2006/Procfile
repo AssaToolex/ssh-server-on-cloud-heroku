@@ -1,0 +1,2 @@
+web: gunicorn web:app
+bot: python3 third-07.py

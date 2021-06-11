@@ -1,0 +1,4 @@
+python-telegram-bot
+gunicorn
+flask
+pytz

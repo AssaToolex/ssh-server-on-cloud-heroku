@@ -1,0 +1,15 @@
+$ git init
+$ git add .
+$ git commit -m 'Init commit'
+
+$ git push -u https://github.com/you/rep
+
+$ heroku login
+$ heroku create
+$ heroku git:remote -a YourAppName
+$ git push heroku master
+$ heroku config:add PORT=8443
+$ heroku ps:scale web=0 -a YourAppName
+$ heroku ps:scale web=1 -a YourAppName
+$ heroku open
+$ heroku logs --tail -a YourAppName
