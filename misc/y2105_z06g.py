@@ -99,13 +99,15 @@ G. Интересное путешествие
 import sys
 import math
 
+towns = dict()
+
 
 def distance_t(t1 :dict, t2 :dict):
     return math.sqrt(
         (t2["x"] - t1["x"]) ** 2 + (t2["y"] - t1["y"]) ** 2)
 
 
-def foo(towns :dict, t_from :dict, t_to :dict, t_exclude: list):
+def foo(t_from :dict, t_to :dict, t_exclude: list):
     result_list = []
     self_idx = t_from["idx"]
     dest_idx = t_to["idx"]
@@ -114,16 +116,19 @@ def foo(towns :dict, t_from :dict, t_to :dict, t_exclude: list):
     for near_town in t_from["L"].keys():
         if near_town == dest_idx:
             result_list.append([near_town, ])  # one step to win
+            break  # for rapid
         else:
             if near_town not in t_exclude_new:
                 result = foo(
-                    towns=towns, t_from=towns[near_town],
+                    t_from=towns[near_town],
                     t_to=t_to, t_exclude=t_exclude_new)
                 if result is None:
                     t_exclude_new.append(near_town)  # block
                 else:
                     for x in result:
                         x.insert(0, near_town)  # claim leg
+                        if len(x) == 1:  # for rapid
+                            break  # for rapid
                     result_list.extend(result)
     del t_exclude_new
     if len(result_list) > 0:
@@ -132,7 +137,6 @@ def foo(towns :dict, t_from :dict, t_to :dict, t_exclude: list):
     return None
 
 
-towns = dict()
 town_len = int(sys.stdin.readline().strip())  # read len
 
 for i in range(town_len):
@@ -154,7 +158,7 @@ for town_i_k, town_i_v in towns.items():
 # print("tovn_1v:", tovn_1v, "; tovn_2v", tovn_2v)
 
 result = foo(
-    towns=towns, t_from=towns[int(tovn_1v)],
+    t_from=towns[int(tovn_1v)],
     t_to=towns[int(tovn_2v)], t_exclude=[])
 
 if result is None:
